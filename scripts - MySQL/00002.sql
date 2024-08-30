@@ -1,0 +1,52 @@
+DELIMITER //
+
+DROP PROCEDURE IF EXISTS sp_INSERE_USUARIO //
+
+CREATE PROCEDURE sp_INSERE_USUARIO (
+    IN  p_NOME_USUARIO                 VARCHAR(30),
+    IN  p_PRIVILEGIO                   CHAR(1),
+    IN  p_SENHA                        VARCHAR(128),
+    IN  p_INATIVO                      BIT,
+    IN  p_DATA_INICIO                  DATETIME,
+    IN  p_DATA_EXPIRACAO               DATETIME,
+    IN  p_QUANTIDADE_CONEXOES          TINYINT,
+    IN  p_QUANTIDADE_CONECTADO         TINYINT,
+    IN  p_ALTERAR_SENHA_PRIMEIRO_LOGON BIT,
+    IN  p_SENHA_POR_TRINTA_DIAS        BIT,
+    IN  p_LOG_ID_USUARIO               SMALLINT,
+    OUT p_ID_USUARIO                   SMALLINT
+)
+BEGIN
+    INSERT INTO USUARIOS (
+        NOME_USUARIO,
+        PRIVILEGIO,
+        SENHA,
+        INATIVO,
+        DATA_INICIO,
+        DATA_EXPIRACAO,
+        QUANTIDADE_CONEXOES,
+        QUANTIDADE_CONECTADO,
+        ALTERAR_SENHA_PRIMEIRO_LOGON,
+        SENHA_POR_TRINTA_DIAS,
+        LOG_ID_USUARIO,
+        LOG_ROTINA
+    ) VALUES (
+        p_NOME_USUARIO,
+        p_PRIVILEGIO,
+        p_SENHA,
+        p_INATIVO,
+        p_DATA_INICIO,
+        p_DATA_EXPIRACAO,
+        p_QUANTIDADE_CONEXOES,
+        p_QUANTIDADE_CONECTADO,
+        p_ALTERAR_SENHA_PRIMEIRO_LOGON,
+        p_SENHA_POR_TRINTA_DIAS,
+        p_LOG_ID_USUARIO,
+        'I'
+    );
+
+    -- GET THE LAST INSERTED ID
+    SET p_ID_USUARIO = LAST_INSERT_ID();
+END //
+
+DELIMITER ;
