@@ -1,0 +1,44 @@
+DROP PROCEDURE IF EXISTS sp_INSERE_ZONA;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_INSERE_ZONA(
+    IN  p_ID_TIPO_ZONA            TINYINT,
+    IN  p_DESCRICAO_ZONA          VARCHAR(50),
+    IN  p_INATIVA                 BIT,
+    IN  p_AREA_MINIMA             DECIMAL(15, 3),
+    IN  p_TESTADA_MINIMA          DECIMAL(15, 3),
+    IN  p_COMPLEMENTO_AREA_MINIMA VARCHAR(8),
+    IN  p_IDENTIFICADOR_ZONA      VARCHAR(10),
+    IN  p_LOG_ID_USUARIO          SMALLINT,
+    OUT p_ID_ZONA                SMALLINT
+)
+BEGIN
+    INSERT INTO ZONAS (
+        ID_TIPO_ZONA,
+        DESCRICAO_ZONA,
+        INATIVA,
+        AREA_MINIMA,
+        TESTADA_MINIMA,
+        COMPLEMENTO_AREA_MINIMA,
+        IDENTIFICADOR_ZONA,
+        LOG_ID_USUARIO,
+        LOG_ROTINA,
+        LOG_DATA_HORA
+    ) VALUES (
+        p_ID_TIPO_ZONA,
+        p_DESCRICAO_ZONA,
+        p_INATIVA,
+        p_AREA_MINIMA,
+        p_TESTADA_MINIMA,
+        p_COMPLEMENTO_AREA_MINIMA,
+        p_IDENTIFICADOR_ZONA,
+        p_LOG_ID_USUARIO,
+        'I',
+        CURRENT_TIMESTAMP
+    );
+
+    SET p_ID_ZONA = LAST_INSERT_ID();
+END//
+
+DELIMITER ;

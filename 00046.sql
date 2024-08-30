@@ -1,0 +1,37 @@
+DROP PROCEDURE IF EXISTS sp_INSERE_CIDADE;
+
+DELIMITER //
+
+CREATE PROCEDURE sp_INSERE_CIDADE(
+    IN p_ID_ESTADO      SMALLINT,
+    IN p_NOME_CIDADE    VARCHAR(45),
+    IN p_CODIGO_IBGE    INTEGER,
+    IN p_NUMERO_DDD     TINYINT,
+    IN p_INATIVA        BIT,
+    IN p_LOG_ID_USUARIO SMALLINT,
+    OUT p_ID_CIDADE     SMALLINT
+)
+BEGIN
+    INSERT INTO CIDADES (
+        ID_ESTADO,
+        NOME_CIDADE,
+        CODIGO_IBGE,
+        NUMERO_DDD,
+        INATIVA,
+        LOG_ID_USUARIO,
+        LOG_ROTINA
+    )
+    VALUES (
+        p_ID_ESTADO,
+        p_NOME_CIDADE,
+        p_CODIGO_IBGE,
+        p_NUMERO_DDD,
+        p_INATIVA,
+        p_LOG_ID_USUARIO,
+        'I'
+    );
+
+    SET p_ID_CIDADE = LAST_INSERT_ID();
+END//
+
+DELIMITER ;
