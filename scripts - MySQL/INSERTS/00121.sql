@@ -1,6 +1,0 @@
-INSERT INTO TIPOS_ENDERECO (DESCRICAO_TIPO_ENDERECO, LOG_ID_USUARIO, LOG_ROTINA)
-VALUES ('RESIDENCIAL',     01, 'I'),
-       ('COMERCIAL',       01, 'I'),
-       ('COBRANÇA',        01, 'I'),
-       ('ENTREGA',         01, 'I'),
-       ('CORRESPONDÊNCIA', 01, 'I');
