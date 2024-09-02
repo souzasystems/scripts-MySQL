@@ -12,7 +12,7 @@ BEGIN
            NOME_ESTADO,
            SIGLA_ESTADO,
            CODIGO_IBGE,
-           INATIVO
+           INATIVO,
            NOME_PAIS
       FROM vw_ESTADOS_PAISES
      WHERE INATIVO = p_INATIVO
