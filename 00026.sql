@@ -1,39 +1,13 @@
-DROP PROCEDURE IF EXISTS sp_INSERE_PAIS;
+-- Verifica se o índice existe
+SELECT COUNT(1)
+  INTO @indexExists
+  FROM information_schema.statistics 
+ WHERE table_schema = DATABASE()
+   AND table_name   = 'VIAS' 
+   AND index_name   = 'idx_Cep';
 
-DELIMITER //
-
-CREATE PROCEDURE sp_INSERE_PAIS (
-    IN p_NOME_PAIS       VARCHAR(50),
-    IN p_SIGLA02         CHAR(2),
-    IN p_SIGLA03         CHAR(3),
-    IN p_CODIGO_ISO_3166 SMALLINT,
-    IN p_NUMERO_DDI      SMALLINT,
-    IN p_INATIVO         BIT,
-    IN p_LOG_ID_USUARIO  SMALLINT,
-    OUT p_ID_PAIS        SMALLINT
-)
-BEGIN
-    INSERT INTO PAISES (
-        NOME_PAIS,
-        SIGLA02,
-        SIGLA03,
-        CODIGO_ISO_3166,
-        NUMERO_DDI,
-        INATIVO,
-        LOG_ID_USUARIO,
-        LOG_ROTINA
-    ) VALUES (
-        p_NOME_PAIS,
-        p_SIGLA02,
-        p_SIGLA03,
-        p_CODIGO_ISO_3166,
-        p_NUMERO_DDI,
-        p_INATIVO,
-        p_LOG_ID_USUARIO,
-        'I'
-    );
-
-    SET p_ID_PAIS = LAST_INSERT_ID();
-END//
-
-DELIMITER ;
+-- Se o índice não existe, cria o índice
+SET @sql := IF(@indexExists = 0, 'CREATE INDEX idx_Cep ON VIAS (CEP);', 'SELECT "ÍNDICE JÁ EXISTE.";');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

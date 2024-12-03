@@ -1,13 +1,13 @@
-DROP PROCEDURE IF EXISTS sp_CONSULTA_TIPOS_ENDERECO;
+-- Verifica se o índice existe
+SELECT COUNT(1)
+  INTO @indexExists
+  FROM information_schema.statistics 
+ WHERE table_schema = DATABASE()
+   AND table_name   = 'CIDADES' 
+   AND index_name   = 'idx_NOME_CIDADE';
 
-DELIMITER //
-
-CREATE PROCEDURE sp_CONSULTA_TIPOS_ENDERECO ()
-BEGIN
-    SELECT ID_TIPO_ENDERECO,
-           DESCRICAO_TIPO_ENDERECO
-      FROM TIPOS_ENDERECO
-     ORDER BY ID_TIPO_ENDERECO;
-END //
-
-DELIMITER ;
+-- Se o índice não existe, cria o índice
+SET @sql := IF(@indexExists = 0, 'CREATE INDEX idx_NOME_CIDADE ON CIDADES (NOME_CIDADE);', 'SELECT "ÍNDICE JÁ EXISTE.";');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;

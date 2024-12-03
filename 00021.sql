@@ -1,19 +1,13 @@
-DROP PROCEDURE IF EXISTS sp_ALTERA_ESTADO_CIVIL;
+-- Verifica se o índice existe
+SELECT COUNT(1)
+  INTO @indexExists
+  FROM information_schema.statistics 
+ WHERE table_schema = DATABASE()
+   AND table_name   = 'LOGRADOUROS' 
+   AND index_name   = 'idx_DESCRICAO_LOGRADOURO';
 
-DELIMITER //
-
-CREATE PROCEDURE sp_ALTERA_ESTADO_CIVIL (
-    IN p_ID_ESTADO_CIVIL        TINYINT,
-    IN p_DESCRICAO_ESTADO_CIVIL VARCHAR(25),
-    IN p_LOG_ID_USUARIO         SMALLINT
-)
-BEGIN
-    UPDATE ESTADOS_CIVIS
-       SET DESCRICAO_ESTADO_CIVIL = p_DESCRICAO_ESTADO_CIVIL,
-           LOG_ID_USUARIO         = p_LOG_ID_USUARIO,
-           LOG_ROTINA             = 'A',
-           LOG_DATA_HORA          = NOW()
-     WHERE ID_ESTADO_CIVIL = p_ID_ESTADO_CIVIL;
-END//
-
-DELIMITER ;
+-- Se o índice não existe, cria o índice
+SET @sql := IF(@indexExists = 0, 'CREATE INDEX idx_DESCRICAO_LOGRADOURO ON LOGRADOUROS (DESCRICAO_LOGRADOURO);', 'SELECT "ÍNDICE JÁ EXISTE.";');
+PREPARE stmt FROM @sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
